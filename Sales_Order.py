@@ -20,11 +20,11 @@ st.image(Logo,width=700)
 # file='https://docs.google.com/spreadsheets/d/10XwWMOqFxrQMiz_d7Vv__806167AQ8Wy6v82z9MOsQc/export?format=xlsx'
 # df = pd.read_excel(file, header=0, engine='openpyxl')
 # # df
-# Sales_Files='https://docs.google.com/spreadsheets/d/1tNRSxI9xv0FJMHbmwLpszP-ObAgpb0dY5AIciPmZWWY/export?format=xlsx'
-# Sales = pd.read_excel(Sales_Files, header=0, engine='openpyxl')
-# Sales['รายการสินค้า']=Sales['รายการสินค้า'].str.split(' / ').str[0]
-# Sales=pd.merge(Sales,df,left_on='รายการสินค้า',right_on='รายการ',how='left')
-# Sales.index = Sales.index + 1
+Sales_Files='https://docs.google.com/spreadsheets/d/1tNRSxI9xv0FJMHbmwLpszP-ObAgpb0dY5AIciPmZWWY/export?format=xlsx'
+Sales = pd.read_excel(Sales_Files, header=0, engine='openpyxl')
+Sales['รายการสินค้า']=Sales['รายการสินค้า'].str.split(' / ').str[0]
+Sales=pd.merge(Sales,df,left_on='รายการสินค้า',right_on='รายการ',how='left')
+Sales.index = Sales.index + 1
 ###################################
 F1,F2=st.columns([1,2])
 with F1:
