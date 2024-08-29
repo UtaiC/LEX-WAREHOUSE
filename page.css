@@ -1,0 +1,20 @@
+/* Main Body */
+
+#root > div:nth-child(1) > div.withScreencast > div > div > div > section {
+    background-color: #bdfcf3 !important;
+    font-family: Arial, sans-serif;
+
+}
+/* Side Bar */
+#root > div:nth-child(1) > div.withScreencast > div > div > div > section.st-emotion-cache-1gv3huu.eczjsme18 > div.st-emotion-cache-6qob1r.eczjsme11{
+    background-color: #10b69f !important;
+}
+/* Top Bar */
+#root > div:nth-child(1) > div.withScreencast > div > div > header{
+    background-color:  #bdfcf3 !important;
+ 
+}
+/* Welcome Header */
+#welcome-to-the-lex-warehouse > div > span{
+    text-align: center;
+}
