@@ -18,3 +18,7 @@
 #welcome-to-the-lex-warehouse > div > span{
     text-align: center;
 }
+/* Nav-Bar */
+#app > div > nav{
+    background-color:  #bdfcf3 !important;
+}

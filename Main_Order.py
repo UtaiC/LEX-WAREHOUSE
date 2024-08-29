@@ -12,6 +12,8 @@ import plotly.graph_objects as go
 import requests
 import sys
 import streamlit.components.v1 as components
+from streamlit_navigation_bar import st_navbar
+from datetime import datetime
 
 # Function to load the CSS file #############################################
 def load_css(file_name):
@@ -25,12 +27,18 @@ def load_html(html_code):
 # Load the CSS file #########################################################
 load_css("page.css")
 ###############################
-st.sidebar.subheader('Main Manu')
-page = st.sidebar.radio("Go to", ["Home", "Stock Update", "Sales Order","Print Order"])
+# st.sidebar.subheader('Main Manu')
+# page = st.radio("Go to", ["Home", "Stock Update", "Sales Order","Print Order"])
+page = st_navbar(["Home", "Stock Update", "Sales Order","Print Order"])
+st.write(page)
 ##########################
-
-Banner=Image.open('WATTANA-Banner.jpg')
-st.image(Banner)
+if page == "Print Order":
+    Logo=Image.open('WATTANA-Logo-Sales.jpg')
+    st.image(Logo,width=700)
+    #########################
+else:
+    Banner=Image.open('WATTANA-Banner.jpg')
+    st.image(Banner)
 
 ## Files Read ###############################################
 file='https://docs.google.com/spreadsheets/d/10XwWMOqFxrQMiz_d7Vv__806167AQ8Wy6v82z9MOsQc/export?format=xlsx'
@@ -94,8 +102,20 @@ elif page == "Stock Update":
 elif page == "Sales Order":
     st.subheader("ตรวจสอบรายการขาย")
     ############################
-    st.write('กรุณาเลือก Sales_Date และ Sales_No เพื่อตรวจสอบรายการขายให้ถูกต้องก่อนดำเนินการขั้นตอนต่อไป')
-    Sales_Date = st.selectbox("Timestamp",['2024-01',	'2024-02',	'2024-03',	'2024-04',	'2024-05',	'2024-06',	'2024-07',	'2024-08',	'2024-09',	'2024-10',	'2024-11',	'2024-12'] )
+    # Define the list of available months
+    months = ['2024-01', '2024-02', '2024-03', '2024-04', '2024-05', '2024-06', 
+            '2024-07', '2024-08', '2024-09', '2024-10', '2024-11', '2024-12']
+
+    # Get the current year and month
+    current_year_month = datetime.now().strftime('%Y-%m')
+
+    # Find the index of the current year-month in the list
+    default_index = months.index(current_year_month) if current_year_month in months else 0
+
+    # Create the selectbox with the default value set to the current month
+    Sales_Date = st.selectbox('Sales_Date', months, index=default_index)
+
+# file='StockLexWarehouse.xlsx'
     #############################
     
     Sales_No = st.selectbox('Sales_No',['WH-000','WH-001', 'WH-002', 'WH-003', 'WH-004', 'WH-005', 'WH-006', 'WH-007', 'WH-008', 'WH-009', 'WH-010', 'WH-011', 'WH-012', 'WH-013', 'WH-014', 'WH-015', 'WH-016', 'WH-017', 'WH-018', 'WH-019', 'WH-020', 'WH-021', 'WH-022', 'WH-023', 'WH-024', 'WH-025', 'WH-026', 'WH-027', 'WH-028', 'WH-029', 'WH-030', 'WH-031', 'WH-032', 'WH-033', 'WH-034', 'WH-035', 'WH-036', 'WH-037', 'WH-038', 'WH-039', 'WH-040', 'WH-041', 'WH-042', 'WH-043', 'WH-044', 'WH-045', 'WH-046', 'WH-047', 'WH-048', 'WH-049', 'WH-050'] )
@@ -140,7 +160,7 @@ elif page == "Sales Order":
             (Sales['Date'] == row['Date']), 
             'ประเภทลูกค้า'
         ] = 'ลูกค้าช่าง'
-    Sales=Sales[['Timestamp','จำนวนสินค้า','เลขที่เสนอราคา','รหัส','รายการสินค้า','รายการ','ประเภทลูกค้า','จำนวนเก่า','ราคาทุนเก่า','ราคาขายทุนเก่า','ราคาช่างทุนเก่า','จำนวนใหม่','ราคาทุนใหม่','ราคาขายทุนใหม่','ราคาช่างทุนใหม่','ยอดรวมสต๊อก']]
+    Sales=Sales[['Timestamp','จำนวนสินค้า','เลขที่เสนอราคา','รหัส','รายการสินค้า','รายการ','ประเภทลูกค้า','จำนวนเก่า','ราคาทุนเก่า','ราคาขายทุนเก่า','ราคาช่างทุนเก่า','จำนวนใหม่','ราคาทุนใหม่','ราคาขายทุนใหม่','ราคาช่างทุนใหม่','ยอดรวมสต๊อก','ลูกค้า','ที่อยู่','เบอร์โทร']]
     #########################################################
     # Convert columns to numeric values and handle NaN
     Sales['จำนวนเก่า'] = Sales['จำนวนเก่า'].apply(pd.to_numeric, errors='coerce')
@@ -217,42 +237,42 @@ elif page == "Sales Order":
     Total_Sales=Total_Sales.round(2)
     st.write('รวมราคาขาย:',Total_Sales,'บาท')
     #############################################################################
-# Calculate Cost_Old based on the same conditions as ราคาขายรวม
-    Cost_Old = np.where(
-        is_customer_technician & is_old_stock_less,
-        (Sales['ราคาช่างทุนเก่า'] * (Sales['จำนวนเก่า']-Sales['จำนวนใหม่']).sum()),
-        np.where(is_customer_technician,
-                (Sales['ราคาช่างทุนเก่า'] * Sales["จำนวนสินค้า"]).sum(),
-                np.where(is_old_stock_less,
-                        (Sales['ราคาทุนเก่า'] * (Sales['จำนวนเก่า']-Sales['จำนวนใหม่']).sum()).sum(),
-                        (Sales['ราคาทุนเก่า'] * Sales["จำนวนสินค้า"]).sum()))
-    )
+# # Calculate Cost_Old based on the same conditions as ราคาขายรวม
+#     Cost_Old = np.where(
+#         is_customer_technician & is_old_stock_less,
+#         (Sales['ราคาช่างทุนเก่า'] * (Sales['จำนวนเก่า']-Sales['จำนวนใหม่']).sum()),
+#         np.where(is_customer_technician,
+#                 (Sales['ราคาช่างทุนเก่า'] * Sales["จำนวนสินค้า"]).sum(),
+#                 np.where(is_old_stock_less,
+#                         (Sales['ราคาทุนเก่า'] * (Sales['จำนวนเก่า']-Sales['จำนวนใหม่']).sum()).sum(),
+#                         (Sales['ราคาทุนเก่า'] * Sales["จำนวนสินค้า"]).sum()))
+#     )
 
-    # Calculate Cost_New only where old stock is less than required quantity
-    Cost_New = np.where(
-        is_customer_technician & is_old_stock_less,
-        (Sales['ราคาช่างทุนเก่า'] * (Sales['จำนวนเก่า']-Sales['จำนวนใหม่']).sum()),
-        np.where(is_customer_technician,
-                (Sales['ราคาช่างทุนเก่า'] * Sales["จำนวนสินค้า"]).sum(),
-                np.where(is_old_stock_less,
-                        (Sales['ราคาทุนเก่า'] * (Sales['จำนวนเก่า']-Sales['จำนวนใหม่']).sum()).sum(),
-                        (Sales['ราคาทุนเก่า'] * Sales["จำนวนสินค้า"]).sum()))
-    )
+    # # Calculate Cost_New only where old stock is less than required quantity
+    # Cost_New = np.where(
+    #     is_customer_technician & is_old_stock_less,
+    #     (Sales['ราคาช่างทุนเก่า'] * (Sales['จำนวนเก่า']-Sales['จำนวนใหม่']).sum()),
+    #     np.where(is_customer_technician,
+    #             (Sales['ราคาช่างทุนเก่า'] * Sales["จำนวนสินค้า"]).sum(),
+    #             np.where(is_old_stock_less,
+    #                     (Sales['ราคาทุนเก่า'] * (Sales['จำนวนเก่า']-Sales['จำนวนใหม่']).sum()).sum(),
+    #                     (Sales['ราคาทุนเก่า'] * Sales["จำนวนสินค้า"]).sum()))
+    # )
     #############################################################################
-    Cost_Old=Cost_Old.sum()
-    Cost_Old=Cost_Old.round(2)
-    st.write('รวมต้นทุนเก่า:',Cost_Old,'บาท')
-    Cost_New=Cost_New.sum()
-    Cost_New=Cost_New.round(2)
-    st.write('รวมต้นทุนใหม่:',Cost_New,'บาท')
-    TT_Cost=Cost_Old+Cost_New
-    st.write('รวมต้นทุนทั้งสิ้น:',TT_Cost,'บาท')
-    Magine=Total_Sales-TT_Cost
-    Magine=Magine.round(2)
-    st.write('กำไรขั้นต้น:',Magine,'บาท')
-    PCT_Magine=100-((TT_Cost/Total_Sales)*100)
-    PCT_Magine=PCT_Magine.round(2)
-    st.write('กำไรขั้นต้น-%:',PCT_Magine,'%')
+    # Cost_Old=Cost_Old.sum()
+    # Cost_Old=Cost_Old.round(2)
+    # st.write('รวมต้นทุนเก่า:',Cost_Old,'บาท')
+    # Cost_New=Cost_New.sum()
+    # Cost_New=Cost_New.round(2)
+    # st.write('รวมต้นทุนใหม่:',Cost_New,'บาท')
+    # TT_Cost=Cost_Old+Cost_New
+    # st.write('รวมต้นทุนทั้งสิ้น:',TT_Cost,'บาท')
+    # Magine=Total_Sales-TT_Cost
+    # Magine=Magine.round(2)
+    # st.write('กำไรขั้นต้น:',Magine,'บาท')
+    # PCT_Magine=100-((TT_Cost/Total_Sales)*100)
+    # PCT_Magine=PCT_Magine.round(2)
+    # st.write('กำไรขั้นต้น-%:',PCT_Magine,'%')
     if Sales.empty:  # Check if the DataFrame is empty
         st.write("")
     else:
@@ -268,16 +288,20 @@ elif page == "Sales Order":
 ###########################################################################################
 elif page == "Print Order":
     ##############
-    Logo=Image.open('WATTANA-Logo-Sales.jpg')
-    st.image(Logo,width=700)
-    #########################
-
-    #########################################################
-    Sales["เลขที่เสนอราคา"]=Sales["เลขที่เสนอราคา"].fillna('None')
-    Sales["Timestamp"]=Sales["Timestamp"].astype(str)
-    Sales=Sales[Sales["Timestamp"].str.contains(Sales_Date)]
-    Sales=Sales[Sales["เลขที่เสนอราคา"].str.contains(Sales_No)]
-    ##############################
+    #root > div:nth-child(1) > div.withScreencast > div > div > div > section
+    st.markdown(
+    """
+    <style>
+    #root > div:nth-child(1) > div.withScreencast > div > div > div > section {
+    background-color:  #fff !important;
+        }
+    #root > div:nth-child(1) > div.withScreencast > div > div > header{
+    background-color:  #fff !important;
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+    # #########################
     # Stock Remain #################
     Sales['จำนวนเก่า'] = Sales['จำนวนเก่า'].apply(pd.to_numeric, errors='coerce')
     Sales['จำนวนใหม่'] = Sales['จำนวนใหม่'].apply(pd.to_numeric, errors='coerce')
@@ -293,27 +317,27 @@ elif page == "Print Order":
     Sales['ราคาขาย']=Sales['ราคาขายรวม']/Sales["จำนวนสินค้า"]
 
     #######################
-    Sales["Timestamp"] = pd.to_datetime(Sales["Timestamp"], errors='coerce')
-    Sales = Sales.dropna(subset=["Timestamp"])
-    Sales = Sales[Sales["Timestamp"].dt.strftime('%Y-%m-%d').str.startswith(Sales_Date)]
-    Sales=Sales[Sales["เลขที่เสนอราคา"].str.contains(Sales_No)]
+    # Sales["Timestamp"] = pd.to_datetime(Sales["Timestamp"], errors='coerce')
+    # Sales = Sales.dropna(subset=["Timestamp"])
+    # Sales = Sales[Sales["Timestamp"].dt.strftime('%Y-%m-%d').str.startswith(Sales_Date)]
+    # Sales=Sales[Sales["เลขที่เสนอราคา"].str.contains(Sales_No)]
 
-    ############################
-    # Calculate total available stock
-    Sales['ยอดรวมสต๊อก'] = Sales['จำนวนเก่า'] + Sales['จำนวนใหม่']
+    # # ############################
+    # # Calculate total available stock
+    # Sales['ยอดรวมสต๊อก'] = Sales['จำนวนเก่า'] + Sales['จำนวนใหม่']
 
-    # Check for stock shortages
-    exceeds_stock = Sales["จำนวนสินค้า"] > Sales['ยอดรวมสต๊อก']
+    # # Check for stock shortages
+    # exceeds_stock = Sales["จำนวนสินค้า"] > Sales['ยอดรวมสต๊อก']
 
-    # If there are items with stock shortages, display them
-    if exceeds_stock.any():
-        insufficient_stock_items = Sales[exceeds_stock]
+    # # If there are items with stock shortages, display them
+    # if exceeds_stock.any():
+    #     insufficient_stock_items = Sales[exceeds_stock]
         
-        for index, row in insufficient_stock_items.iterrows():
-            st.error(
-                f'สต๊อกคงเหลือน้อยกว่ายอดสั่งชื้อสำหรับ: {row["รายการสินค้า"]} '
-                f'(เหลือในสต๊อก: {row["ยอดรวมสต๊อก"]} ชิ้น)'
-            )
+    #     for index, row in insufficient_stock_items.iterrows():
+    #         st.error(
+    #             f'สต๊อกคงเหลือน้อยกว่ายอดสั่งชื้อสำหรับ: {row["รายการสินค้า"]} '
+    #             f'(เหลือในสต๊อก: {row["ยอดรวมสต๊อก"]} ชิ้น)'
+    #         )
     ############################
     Date=Sales['Timestamp'].mean()
     formatted_date = Date.strftime('%d-%m-%Y')  # or '%d/%m/%Y' for a different separator
@@ -322,11 +346,12 @@ elif page == "Print Order":
     customer_name = Sales[Sales['ลูกค้า'] != 'None']['ลูกค้า'].iloc[0]
     customer_Addre = Sales[Sales['ที่อยู่'] != 'None']['ที่อยู่'].iloc[0]
     customer_phone = str(int(Sales[Sales['เบอร์โทร'] != 'None']['เบอร์โทร'].iloc[0]))
+    sales_no=Sales[Sales['เลขที่เสนอราคา'] != 'None']['เลขที่เสนอราคา'].iloc[0]
     # customer_phone =customer_phone.astype(str)
     ########################
     col1, col2 = st.columns([2, 1])
     with col2:
-        st.write('เลขที่ใบขายสินค้า: ',Sales_No)
+        st.write('เลขที่ใบขายสินค้า: ',sales_no)
         st.write(f"วันที่: {formatted_date}")
     with col1:
         st.write("ลูกค้า:",customer_name)
