@@ -13,27 +13,62 @@ import requests
 import sys
 import streamlit.components.v1 as components
 #
-Logo=Image.open('WATTANA-Logo-Sales.jpg')
-st.image(Logo,width=700)
-# Table #####################################################
-# file='StockLexWarehouse.xlsx'
-file='https://docs.google.com/spreadsheets/d/10XwWMOqFxrQMiz_d7Vv__806167AQ8Wy6v82z9MOsQc/export?format=xlsx'
-df = pd.read_excel(file, header=0, engine='openpyxl')
-# df
-Sales_Files='https://docs.google.com/spreadsheets/d/1tNRSxI9xv0FJMHbmwLpszP-ObAgpb0dY5AIciPmZWWY/export?format=xlsx'
-Sales = pd.read_excel(Sales_Files, header=0, engine='openpyxl')
-Sales['รายการสินค้า']=Sales['รายการสินค้า'].str.split(' / ').str[0]
-Sales=pd.merge(Sales,df,left_on='รายการสินค้า',right_on='รายการ',how='left')
-Sales.index = Sales.index + 1
+
 ###################################
 F1,F2=st.columns([1,2])
 with F1:
 
     Sales_No = st.selectbox('Sales_No',['WH-001', 'WH-002', 'WH-003', 'WH-004', 'WH-005', 'WH-006', 'WH-007', 'WH-008', 'WH-009', 'WH-010', 'WH-011', 'WH-012', 'WH-013', 'WH-014', 'WH-015', 'WH-016', 'WH-017', 'WH-018', 'WH-019', 'WH-020', 'WH-021', 'WH-022', 'WH-023', 'WH-024', 'WH-025', 'WH-026', 'WH-027', 'WH-028', 'WH-029', 'WH-030', 'WH-031', 'WH-032', 'WH-033', 'WH-034', 'WH-035', 'WH-036', 'WH-037', 'WH-038', 'WH-039', 'WH-040', 'WH-041', 'WH-042', 'WH-043', 'WH-044', 'WH-045', 'WH-046', 'WH-047', 'WH-048', 'WH-049', 'WH-050'] )
 with F2:
-    Sales_Date = st.selectbox('Sales_Date',['2024-01',	'2024-02',	'2024-03',	'2024-04',	'2024-05',	'2024-06',	'2024-07',	'2024-08',	'2024-09',	'2024-10',	'2024-11',	'2024-12'] )
+    import streamlit as st
+    from datetime import datetime
 
-Sales=pd.read_excel(Sales_No+'Sales-Update.xlsx')
+    # Define the list of available months
+    months = ['2024-01', '2024-02', '2024-03', '2024-04', '2024-05', '2024-06', 
+            '2024-07', '2024-08', '2024-09', '2024-10', '2024-11', '2024-12']
+
+    # Get the current year and month
+    current_year_month = datetime.now().strftime('%Y-%m')
+
+    # Find the index of the current year-month in the list
+    default_index = months.index(current_year_month) if current_year_month in months else 0
+
+    # Create the selectbox with the default value set to the current month
+    Sales_Date = st.selectbox('Sales_Date', months, index=default_index)
+
+# file='StockLexWarehouse.xlsx'
+file='https://docs.google.com/spreadsheets/d/10XwWMOqFxrQMiz_d7Vv__806167AQ8Wy6v82z9MOsQc/export?format=xlsx'
+df = pd.read_excel(file, header=0, engine='openpyxl')
+stock_data=df
+Sales_Files='https://docs.google.com/spreadsheets/d/1tNRSxI9xv0FJMHbmwLpszP-ObAgpb0dY5AIciPmZWWY/export?format=xlsx'
+Sales = pd.read_excel(Sales_Files, header=0, engine='openpyxl')
+Sales['รายการสินค้า']=Sales['รายการสินค้า'].astype(str)
+Sales['รายการสินค้า']=Sales['รายการสินค้า'].str.split('|').str[0]
+##################################################
+# Clean the 'รายการสินค้า' column in Sales
+Sales["รายการสินค้า"] = Sales["รายการสินค้า"].str.strip()
+Sales["รายการสินค้า"] = Sales["รายการสินค้า"].str.replace(r'\s+', ' ', regex=True)
+Sales["รายการสินค้า"] = Sales["รายการสินค้า"].str.lower()
+# Clean the 'รายการ' column in stock_data
+stock_data["รายการ"] = stock_data["รายการ"].str.strip()
+stock_data["รายการ"] = stock_data["รายการ"].str.replace(r'\s+', ' ', regex=True)
+stock_data["รายการ"] = stock_data["รายการ"].str.lower()
+########################################################
+# Perform the merge
+Sales = pd.merge(Sales, stock_data, left_on='รายการสินค้า', right_on='รายการ', how='left')
+Sales.index = Sales.index + 1
+
+##############
+Logo=Image.open('WATTANA-Logo-Sales.jpg')
+st.image(Logo,width=700)
+#########################
+
+#########################################################
+Sales["เลขที่เสนอราคา"]=Sales["เลขที่เสนอราคา"].fillna('None')
+Sales["Timestamp"]=Sales["Timestamp"].astype(str)
+Sales=Sales[Sales["Timestamp"].str.contains(Sales_Date)]
+Sales=Sales[Sales["เลขที่เสนอราคา"].str.contains(Sales_No)]
+##############################
 # Stock Remain #################
 Sales['จำนวนเก่า'] = Sales['จำนวนเก่า'].apply(pd.to_numeric, errors='coerce')
 Sales['จำนวนใหม่'] = Sales['จำนวนใหม่'].apply(pd.to_numeric, errors='coerce')
@@ -49,11 +84,10 @@ Sales['ราคาขายรวม'] = np.where(
 Sales['ราคาขาย']=Sales['ราคาขายรวม']/Sales["จำนวนสินค้า"]
 
 #######################
-Sales=Sales[Sales["เลขที่เสนอราคา"].str.contains(Sales_No)]
-
 Sales["Timestamp"] = pd.to_datetime(Sales["Timestamp"], errors='coerce')
 Sales = Sales.dropna(subset=["Timestamp"])
 Sales = Sales[Sales["Timestamp"].dt.strftime('%Y-%m-%d').str.startswith(Sales_Date)]
+Sales=Sales[Sales["เลขที่เสนอราคา"].str.contains(Sales_No)]
 
 ############################
 # Calculate total available stock
