@@ -1,10 +1,10 @@
-/* Main Body */
+/* Main Body
 
 #root > div:nth-child(1) > div.withScreencast > div > div > div > section {
     background-color: #bdfcf3 !important;
     font-family: Arial, sans-serif;
 
-}
+} */
 /* Side Bar */
 #root > div:nth-child(1) > div.withScreencast > div > div > div > section.st-emotion-cache-1gv3huu.eczjsme18 > div.st-emotion-cache-6qob1r.eczjsme11{
     background-color: #10b69f !important;
@@ -19,6 +19,10 @@
     text-align: center;
 }
 /* Nav-Bar */
-#app > div > nav{
-    background-color:  #bdfcf3 !important;
+#app > div > div > div{
+    background-color:  #06ffda !important
+    
 }
+
+
+

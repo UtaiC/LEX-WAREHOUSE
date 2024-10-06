@@ -14,23 +14,14 @@ import sys
 import streamlit.components.v1 as components
 from streamlit_navigation_bar import st_navbar
 from datetime import datetime
-
-# Function to load the CSS file #############################################
-def load_css(file_name):
-    with open(file_name) as f:
-        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
-
-# Function to load custom HTML content######################################
-def load_html(html_code):
-    components.html(html_code)
-
-# Load the CSS file #########################################################
-load_css("page.css")
-###############################
-# st.sidebar.subheader('Main Manu')
-# page = st.radio("Go to", ["Home", "Stock Update", "Sales Order","Print Order"])
-page = st_navbar(["Home", "Stock Update", "Sales Order","Print Order"])
-st.write(page)
+from streamlit_option_menu import option_menu
+#########################################################
+page=st_navbar(["Home", "Stock Update", "Sales Order","Print Order"])
+# page=option_menu(
+#     menu_title=None,
+#     options=["Home", "Stock Update", "Sales Order","Print Order"],
+#     orientation='horizontal',
+# )
 ##########################
 if page == "Print Order":
     Logo=Image.open('WATTANA-Logo-Sales.jpg')
@@ -238,42 +229,7 @@ elif page == "Sales Order":
     Total_Sales=Total_Sales.round(2)
     st.write('รวมราคาขาย:',Total_Sales,'บาท')
     #############################################################################
-# # Calculate Cost_Old based on the same conditions as ราคาขายรวม
-#     Cost_Old = np.where(
-#         is_customer_technician & is_old_stock_less,
-#         (Sales['ราคาช่างทุนเก่า'] * (Sales['จำนวนเก่า']-Sales['จำนวนใหม่']).sum()),
-#         np.where(is_customer_technician,
-#                 (Sales['ราคาช่างทุนเก่า'] * Sales["จำนวนสินค้า"]).sum(),
-#                 np.where(is_old_stock_less,
-#                         (Sales['ราคาทุนเก่า'] * (Sales['จำนวนเก่า']-Sales['จำนวนใหม่']).sum()).sum(),
-#                         (Sales['ราคาทุนเก่า'] * Sales["จำนวนสินค้า"]).sum()))
-#     )
 
-    # # Calculate Cost_New only where old stock is less than required quantity
-    # Cost_New = np.where(
-    #     is_customer_technician & is_old_stock_less,
-    #     (Sales['ราคาช่างทุนเก่า'] * (Sales['จำนวนเก่า']-Sales['จำนวนใหม่']).sum()),
-    #     np.where(is_customer_technician,
-    #             (Sales['ราคาช่างทุนเก่า'] * Sales["จำนวนสินค้า"]).sum(),
-    #             np.where(is_old_stock_less,
-    #                     (Sales['ราคาทุนเก่า'] * (Sales['จำนวนเก่า']-Sales['จำนวนใหม่']).sum()).sum(),
-    #                     (Sales['ราคาทุนเก่า'] * Sales["จำนวนสินค้า"]).sum()))
-    # )
-    #############################################################################
-    # Cost_Old=Cost_Old.sum()
-    # Cost_Old=Cost_Old.round(2)
-    # st.write('รวมต้นทุนเก่า:',Cost_Old,'บาท')
-    # Cost_New=Cost_New.sum()
-    # Cost_New=Cost_New.round(2)
-    # st.write('รวมต้นทุนใหม่:',Cost_New,'บาท')
-    # TT_Cost=Cost_Old+Cost_New
-    # st.write('รวมต้นทุนทั้งสิ้น:',TT_Cost,'บาท')
-    # Magine=Total_Sales-TT_Cost
-    # Magine=Magine.round(2)
-    # st.write('กำไรขั้นต้น:',Magine,'บาท')
-    # PCT_Magine=100-((TT_Cost/Total_Sales)*100)
-    # PCT_Magine=PCT_Magine.round(2)
-    # st.write('กำไรขั้นต้น-%:',PCT_Magine,'%')
     if Sales.empty:  # Check if the DataFrame is empty
         st.write("")
     else:
@@ -362,6 +318,7 @@ elif page == "Print Order":
 
     # Sales[['ราคาขาย','ราคาขายรวม']]=Sales[['ราคาขาย','ราคาขายรวม']].round(2)
     Sales=Sales[['รายการสินค้า',"จำนวนสินค้า",'ราคาขาย','ราคาขายรวม']]
+    Sales.index=Sales.index+1
     st.table(Sales)
     #####################################
     # Strip leading/trailing whitespace
