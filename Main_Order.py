@@ -113,10 +113,10 @@ elif page == "Sales Order":
     with col1:
         Sales_No = st.selectbox('Sales_No',['WH-000','WH-001', 'WH-002', 'WH-003', 'WH-004', 'WH-005', 'WH-006', 'WH-007', 'WH-008', 'WH-009', 'WH-010', 'WH-011', 'WH-012', 'WH-013', 'WH-014', 'WH-015', 'WH-016', 'WH-017', 'WH-018', 'WH-019', 'WH-020', 'WH-021', 'WH-022', 'WH-023', 'WH-024', 'WH-025', 'WH-026', 'WH-027', 'WH-028', 'WH-029', 'WH-030', 'WH-031', 'WH-032', 'WH-033', 'WH-034', 'WH-035', 'WH-036', 'WH-037', 'WH-038', 'WH-039', 'WH-040', 'WH-041', 'WH-042', 'WH-043', 'WH-044', 'WH-045', 'WH-046', 'WH-047', 'WH-048', 'WH-049', 'WH-050'] )
     #########################################################
-    Sales["เลขที่เสนอราคา"]=Sales["เลขที่เสนอราคา"].fillna('None')
+    Sales["เลขที่ขายสินค้า"]=Sales["เลขที่ขายสินค้า"].fillna('None')
     Sales["Timestamp"]=Sales["Timestamp"].astype(str)
     Sales=Sales[Sales["Timestamp"].str.contains(Sales_Date)]
-    Sales=Sales[Sales["เลขที่เสนอราคา"].str.contains(Sales_No)]
+    Sales=Sales[Sales["เลขที่ขายสินค้า"].str.contains(Sales_No)]
     ##############################
     # Calculate total available stock
     Sales['ยอดรวมสต๊อก'] = Sales['จำนวนเก่า'] + Sales['จำนวนใหม่']
@@ -141,18 +141,18 @@ elif page == "Sales Order":
     # Step 1: Identify rows where 'ประเภทลูกค้า' is 'ลูกค้าช่าง'
     condition = Sales['ประเภทลูกค้า'] == 'ลูกค้าช่าง'
 
-    # Step 2: Find unique 'เลขที่เสนอราคา' and 'Date' for these rows
+    # Step 2: Find unique 'เลขที่ขายสินค้า' and 'Date' for these rows
     duplicate_rows = Sales[condition]
-    unique_criteria = duplicate_rows[['เลขที่เสนอราคา', 'Date']].drop_duplicates()
+    unique_criteria = duplicate_rows[['เลขที่ขายสินค้า', 'Date']].drop_duplicates()
 
-    # Step 3: For each unique (เลขที่เสนอราคา, Date), update 'ประเภทลูกค้า' to 'ลูกค้าช่าง'
+    # Step 3: For each unique (เลขที่ขายสินค้า, Date), update 'ประเภทลูกค้า' to 'ลูกค้าช่าง'
     for _, row in unique_criteria.iterrows():
         Sales.loc[
-            (Sales['เลขที่เสนอราคา'] == row['เลขที่เสนอราคา']) & 
+            (Sales['เลขที่ขายสินค้า'] == row['เลขที่ขายสินค้า']) & 
             (Sales['Date'] == row['Date']), 
             'ประเภทลูกค้า'
         ] = 'ลูกค้าช่าง'
-    Sales=Sales[['Timestamp','จำนวนสินค้า','เลขที่เสนอราคา','รหัส','รายการสินค้า','รายการ','ประเภทลูกค้า','จำนวนเก่า','ราคาทุนเก่า','ราคาขายทุนเก่า','ราคาช่างทุนเก่า','จำนวนใหม่','ราคาทุนใหม่','ราคาขายทุนใหม่','ราคาช่างทุนใหม่','ยอดรวมสต๊อก','ลูกค้า','ที่อยู่','เบอร์โทร']]
+    Sales=Sales[['Timestamp','จำนวนสินค้า','เลขที่ขายสินค้า','รหัส','รายการสินค้า','รายการ','ประเภทลูกค้า','จำนวนเก่า','ราคาทุนเก่า','ราคาขายทุนเก่า','ราคาช่างทุนเก่า','จำนวนใหม่','ราคาทุนใหม่','ราคาขายทุนใหม่','ราคาช่างทุนใหม่','ยอดรวมสต๊อก','ลูกค้า','ที่อยู่','เบอร์โทร']]
     #########################################################
     # Convert columns to numeric values and handle NaN
     Sales['จำนวนเก่า'] = Sales['จำนวนเก่า'].apply(pd.to_numeric, errors='coerce')
@@ -223,7 +223,7 @@ elif page == "Sales Order":
             
             st.success("Sales quantities updated successfully!")
             st.write("Updated Sales DataFrame:")
-            st.write(Sales[['เลขที่เสนอราคา','ลูกค้า','ที่อยู่','เบอร์โทร','จำนวนสินค้า','รายการสินค้า']])
+            st.write(Sales[['เลขที่ขายสินค้า','ลูกค้า','ที่อยู่','เบอร์โทร','จำนวนสินค้า','รายการสินค้า']])
         ##### Profit #####################################################
     Total_Sales=Sales['ราคาขายรวม'].sum()
     Total_Sales=Total_Sales.round(2)
@@ -284,7 +284,7 @@ elif page == "Print Order":
     Sales=pd.read_excel(Sales_No+'Sales-Update.xlsx')
     ############
     Sales=Sales[Sales["Timestamp"].str.contains(Sales_Date)]
-    Sales=Sales[Sales["เลขที่เสนอราคา"].str.contains(Sales_No)]
+    Sales=Sales[Sales["เลขที่ขายสินค้า"].str.contains(Sales_No)]
 
     ############################
     Sales["Timestamp"] = pd.to_datetime(Sales["Timestamp"], errors='coerce')
@@ -295,7 +295,7 @@ elif page == "Print Order":
     customer_name = Sales[Sales['ลูกค้า'] != 'None']['ลูกค้า'].iloc[0]
     customer_Addre = Sales[Sales['ที่อยู่'] != 'None']['ที่อยู่'].iloc[0]
     customer_phone = str(int(Sales[Sales['เบอร์โทร'] != 'None']['เบอร์โทร'].iloc[0]))
-    sales_no=Sales[Sales['เลขที่เสนอราคา'] != 'None']['เลขที่เสนอราคา'].iloc[0]
+    sales_no=Sales[Sales['เลขที่ขายสินค้า'] != 'None']['เลขที่ขายสินค้า'].iloc[0]
     # customer_phone =customer_phone.astype(str)
     ########################
     col1, col2 = st.columns([2, 1])
