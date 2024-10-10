@@ -91,6 +91,7 @@ elif page == "Stock Update":
 
 # Sales Page #################################################
 elif page == "Sales Order":
+    st.subheader("Update Sep-10-2024")
     st.subheader("ตรวจสอบรายการขาย")
     ############################
     ############################
