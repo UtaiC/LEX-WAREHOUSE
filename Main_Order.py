@@ -16,6 +16,7 @@ from streamlit_navigation_bar import st_navbar
 from datetime import datetime
 from streamlit_option_menu import option_menu
 #########################################################
+st.write('Test Update files)
 page=st_navbar(["Home", "Stock Update", "Sales Order","Print Order"])
 # page=option_menu(
 #     menu_title=None,
