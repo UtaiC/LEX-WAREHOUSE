@@ -16,6 +16,7 @@ from streamlit_navigation_bar import st_navbar
 from datetime import datetime
 from streamlit_option_menu import option_menu
 #########################################################
+
 page=st_navbar(["Home", "Stock Update", "Sales Order","Print Order"])
 # page=option_menu(
 #     menu_title=None,
@@ -62,6 +63,7 @@ if page == "Home":
 
 # Stock Page ################################################
 elif page == "Stock Update":
+    # st.write('Test Update files')
     st.subheader("รายการสินค้า")
 
     stock_data
