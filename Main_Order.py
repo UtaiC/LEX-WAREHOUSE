@@ -63,7 +63,7 @@ if page == "Home":
 
 # Stock Page ################################################
 elif page == "Stock Update":
-    st.write('Test Update files')
+    # st.write('Test Update files')
     st.subheader("รายการสินค้า")
 
     stock_data
