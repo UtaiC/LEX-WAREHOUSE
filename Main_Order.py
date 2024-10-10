@@ -242,6 +242,13 @@ elif page == "Sales Order":
         st.write("โปรดเลือกรายการขายสินค้าให้ถูกต้อง หรือไม่ได้บันทึกข้อมูลการขาย")
     else:
         st.write("กรุณาดำเนินตามกระบวนการขายต่อ")
+##########################################################################################
+        # Button to navigate to Print Order page
+        if st.button('Print Order', key="Print Order"):
+            st.session_state['page'] = 'Print Order'
+            st.experimental_rerun()  # Refresh the app to show Print Order page
+          
+
 ###########################################################################################
 elif page == "Print Order":
     ##############
@@ -406,8 +413,8 @@ elif page == "Print Order":
         {content3}
     </div>
     """
-    import streamlit.components.v1 as components
-    components.html(html_code3)
+    # import streamlit.components.v1 as components
+    # components.html(html_code3)
 
 
 
