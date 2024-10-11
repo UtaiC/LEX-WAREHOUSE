@@ -12,7 +12,7 @@ import plotly.graph_objects as go
 import requests
 import sys
 import streamlit.components.v1 as components
-from streamlit_navigation_bar import st_navbar
+# from streamlit_navigation_bar import st_navbar
 from datetime import datetime
 from streamlit_option_menu import option_menu
 #########################################################
