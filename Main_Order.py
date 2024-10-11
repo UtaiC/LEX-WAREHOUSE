@@ -14,7 +14,7 @@ import sys
 import streamlit.components.v1 as components
 # from streamlit_navigation_bar import st_navbar
 from datetime import datetime
-from streamlit_option_menu import option_menu
+# from streamlit_option_menu import option_menu
 #########################################################
 
 page=st.sidebar.selectbox('Select Page',["Home", "Stock Update", "Sales Order","Print Order"])
