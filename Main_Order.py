@@ -16,13 +16,15 @@ from streamlit_navigation_bar import st_navbar
 from datetime import datetime
 from streamlit_option_menu import option_menu
 #########################################################
+# page=st_navbar(["Home", "Stock Update", "Sales Order","Print Order"])
+st.sidebar.title("Navigation")
 
-page=st_navbar(["Home", "Stock Update", "Sales Order","Print Order"])
-# page=option_menu(
-#     menu_title=None,
-#     options=["Home", "Stock Update", "Sales Order","Print Order"],
-#     orientation='horizontal',
-# )
+# Sidebar options (e.g., for different pages or sections)
+option = st.sidebar.selectbox(
+    'Select a page:',
+    ["Home", "Stock Update", "Sales Order","Print Order"]
+)
+
 ##########################
 if page == "Print Order":
     Logo=Image.open('WATTANA-Logo-Sales.jpg')
