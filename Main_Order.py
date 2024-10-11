@@ -17,7 +17,7 @@ from datetime import datetime
 from streamlit_option_menu import option_menu
 #########################################################
 
-page=st.sidebar.selectbox(["Home", "Stock Update", "Sales Order","Print Order"])
+page=st.sidebar.selectbox('Select Page',["Home", "Stock Update", "Sales Order","Print Order"])
 # page=option_menu(
 #     menu_title=None,
 #     options=["Home", "Stock Update", "Sales Order","Print Order"],
