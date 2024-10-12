@@ -12,9 +12,9 @@ import plotly.graph_objects as go
 import requests
 import sys
 import streamlit.components.v1 as components
-from streamlit_navigation_bar import st_navbar
+# from streamlit_navigation_bar import st_navbar
 from datetime import datetime
-from streamlit_option_menu import option_menu
+# from streamlit_option_menu import option_menu
 #########################################################
 
 page=st.sidebar.selectbox('Select Page',["Home", "Stock Update", "Sales Order","Print Order"])
@@ -246,11 +246,6 @@ elif page == "Sales Order":
     else:
         st.write("กรุณาดำเนินตามกระบวนการขายต่อ")
 ##########################################################################################
-        # Button to navigate to Print Order page
-        if st.button('Print Order', key="Print Order"):
-            st.session_state['page'] = 'Print Order'
-            st.experimental_rerun()  # Refresh the app to show Print Order page
-          
 
 ###########################################################################################
 elif page == "Print Order":
