@@ -286,8 +286,8 @@ elif page == "Print Order":
         
     #########################################################
     # #######################
-    Area=r"C:/Users/utaic/LEX-WAREHOUSE/"
-    Sales=pd.read_excel(Area+Sales_No+'Sales-Update.xlsx')
+    Area=r"This PC/Users/utaic/LEX-WAREHOUSE/"
+    Sales=pd.read_excel(v+Sales_No+'Sales-Update.xlsx')
     ############
     Sales=Sales[Sales["Timestamp"].str.contains(Sales_Date)]
     Sales=Sales[Sales["เลขที่ขายสินค้า"].str.contains(Sales_No)]
