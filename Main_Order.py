@@ -285,8 +285,9 @@ elif page == "Print Order":
         Sales_No = st.selectbox('Sales_No',['WH-000','WH-001', 'WH-002', 'WH-003', 'WH-004', 'WH-005', 'WH-006', 'WH-007', 'WH-008', 'WH-009', 'WH-010', 'WH-011', 'WH-012', 'WH-013', 'WH-014', 'WH-015', 'WH-016', 'WH-017', 'WH-018', 'WH-019', 'WH-020', 'WH-021', 'WH-022', 'WH-023', 'WH-024', 'WH-025', 'WH-026', 'WH-027', 'WH-028', 'WH-029', 'WH-030', 'WH-031', 'WH-032', 'WH-033', 'WH-034', 'WH-035', 'WH-036', 'WH-037', 'WH-038', 'WH-039', 'WH-040', 'WH-041', 'WH-042', 'WH-043', 'WH-044', 'WH-045', 'WH-046', 'WH-047', 'WH-048', 'WH-049', 'WH-050'] )
         
     #########################################################
-    # #########################
-    Sales=pd.read_excel(Sales_No+'Sales-Update.xlsx')
+    # #######################
+    Area=r"This PC/Users/utaic/LEX-WAREHOUSE/"
+    Sales=pd.read_excel(v+Sales_No+'Sales-Update.xlsx')
     ############
     Sales=Sales[Sales["Timestamp"].str.contains(Sales_Date)]
     Sales=Sales[Sales["เลขที่ขายสินค้า"].str.contains(Sales_No)]
