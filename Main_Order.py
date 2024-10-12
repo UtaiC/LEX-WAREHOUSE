@@ -236,7 +236,7 @@ elif page == "Sales Order":
     if Sales.empty:  # Check if the DataFrame is empty
         st.write("")
     else:
-        Area=r"This PC/Users/utaic/LEX-WAREHOUSE/"
+        Area=r'C:\Users\utaic\LEX-WAREHOUSE'
         Sales.to_excel(Area+Sales_No+'Sales-Update.xlsx')
         st.write('Sales-updated and Exportsuccessfully!')
     if Sales_No == 'WH-000':
@@ -286,7 +286,7 @@ elif page == "Print Order":
         
     #########################################################
     # #######################
-    Area=r"This PC/Users/utaic/LEX-WAREHOUSE/"
+    Area=r'C:\Users\utaic\LEX-WAREHOUSE'
     Sales=pd.read_excel(v+Sales_No+'Sales-Update.xlsx')
     ############
     Sales=Sales[Sales["Timestamp"].str.contains(Sales_Date)]
