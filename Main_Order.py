@@ -236,8 +236,8 @@ elif page == "Sales Order":
     if Sales.empty:  # Check if the DataFrame is empty
         st.write("")
     else:
-
-        Sales.to_excel(Sales_No+'Sales-Update.xlsx')
+        Area=r"This PC/Users/utaic/LEX-WAREHOUSE/"
+        Sales.to_excel(Area+Sales_No+'Sales-Update.xlsx')
         st.write('Sales-updated and Exportsuccessfully!')
     if Sales_No == 'WH-000':
         st.write("ท่านยังไม่ได้เลือก Sales_No ที่ถูกต้องเพื่อตรวจสอบรายการขาย")
