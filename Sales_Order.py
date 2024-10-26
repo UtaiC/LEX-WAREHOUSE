@@ -210,19 +210,40 @@ with col3:
     import streamlit.components.v1 as components
     components.html(html_code2, height=100)
 ###############################
-label4 = 'หมายเหตุ:___________________________________________________________________ '
+# st.text_input('หมายเหตุ:')
+# label4 = 'หมายเหตุ:___________________________________________________________________ '
 
-# Format the content with two decimal places
-content4 = f"{label4}"
+# # Format the content with two decimal places
+# content4 = f"{label4}"
 
-# Custom HTML with inline CSS
+# # Custom HTML with inline CSS
+# html_code4 = f"""
+# <div style="text-align: center;background-color: #f0f0f0; padding: 50px">
+#     {content4}
+# </div>
+# """
+# import streamlit.components.v1 as components
+# components.html(html_code4, height=100)
+import streamlit as st
+import streamlit.components.v1 as components
+
+# User input field
+user_input = st.text_input('หมายเหตุ:', '')
+
+# Format label and display with input
+label4 = 'หมายเหตุ:'
+content4 = f"{label4} {user_input}"
+
+# Custom HTML with inline CSS to display the label and input
 html_code4 = f"""
-<div style="text-align: center;background-color: #f0f0f0; padding: 50px">
+<div style="text-align: center; background-color: #f0f0f0; padding: 20px; border-radius: 5px;">
     {content4}
 </div>
 """
-import streamlit.components.v1 as components
+
+# Display the custom HTML
 components.html(html_code4, height=100)
+
 ###############################
 label3='ทางร้านขอกราบขอบพระคุณลูกค้าทุกท่าน ที่ให้ความกรุณาใช้สินค้าจากทางร้าน หวังว่าจะได้มีโอกาสรรับใช้ท่านอีกในโอกาสต่อไป ท่านสามารถติดต่อสอบถามสินค้าเพิ่มเติม หรือให้คำแนะนำทางร้านได้ที่ โทร 085 287 1408'
 
