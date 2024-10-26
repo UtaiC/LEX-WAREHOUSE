@@ -405,18 +405,18 @@ elif page == "Print Order":
     user_input = st.text_input('หมายเหตุ:', '')
 
     # Format label and display with input
-    label4 = 'หมายเหตุ:'
-    content4 = f"{label4} {user_input}"
+    # label4 = 'หมายเหตุ:'
+    # content4 = f"{label4} {user_input}"
 
-    # Custom HTML with inline CSS to display the label and input
-    html_code4 = f"""
-    <div style="text-align: center; background-color: #f0f0f0; padding: 20px; border-radius: 5px;">
-        {content4}
-    </div>
-    """
+    # # Custom HTML with inline CSS to display the label and input
+    # html_code4 = f"""
+    # <div style="text-align: center; background-color: #f0f0f0; padding: 20px; border-radius: 5px;">
+    #     {content4}
+    # </div>
+    # """
 
-    # Display the custom HTML
-    components.html(html_code4, height=100)
+    # # Display the custom HTML
+    # components.html(html_code4, height=100)
 
 ###############################
     ###############################
