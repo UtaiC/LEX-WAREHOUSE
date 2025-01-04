@@ -93,6 +93,54 @@ elif page == "Stock Update":
 
 # Sales Page #################################################
 elif page == "Sales Order":
+    ### Input ############################################
+    import streamlit as st
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    # Title of the app
+    st.title("Data Input and Analysis App")
+
+    # Step 3: Create Input Sections
+    st.header("Data Input")
+
+    # Create input fields for data
+    num_rows = st.number_input("Number of Rows", min_value=1, value=5)
+
+    # Input for each column
+    data = []
+    for i in range(num_rows):
+        col1 = st.number_input(f"Row {i + 1} - Column 1", key=f"col1_{i}")
+        col2 = st.number_input(f"Row {i + 1} - Column 2", key=f"col2_{i}")
+        data.append([col1, col2])
+
+    # Convert the input data to a DataFrame
+    df = pd.DataFrame(data, columns=["Column 1", "Column 2"])
+
+    # Show the DataFrame
+    st.subheader("Data Preview")
+    st.write(df)
+
+    # Step 4: Analysis Section
+    st.header("Data Analysis")
+
+    if st.button("Analyze"):
+        # Basic statistics
+        st.subheader("Basic Statistics")
+        st.write(df.describe())
+
+        # Visualization (e.g., scatter plot)
+        st.subheader("Scatter Plot")
+        fig, ax = plt.subplots()
+        ax.scatter(df["Column 1"], df["Column 2"])
+        ax.set_xlabel("Column 1")
+        ax.set_ylabel("Column 2")
+        ax.set_title("Scatter Plot of Column 1 vs Column 2")
+        st.pyplot(fig)
+
+
+    #######################################
     # st.subheader("Update Sep-10-2024")
     st.subheader("ตรวจสอบรายการขาย")
     ############################
